@@ -25,7 +25,8 @@ struct illdoitlaterApp: App {
 
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            TodoView()
+//            ContentView()
         }
         .modelContainer(sharedModelContainer)
     }
