@@ -12,22 +12,22 @@ import SwiftData
 struct illdoitlaterApp: App {
     var sharedModelContainer: ModelContainer = {
         let schema = Schema([
-            Item.self,
+            Todo.self,
         ])
         let modelConfiguration = ModelConfiguration(schema: schema, isStoredInMemoryOnly: false)
-
+        
         do {
-            return try ModelContainer(for: schema, configurations: [modelConfiguration])
+            let container = try ModelContainer(for: schema, configurations: [modelConfiguration])
+            container.mainContext.autosaveEnabled = true
+            return container
         } catch {
             fatalError("Could not create ModelContainer: \(error)")
         }
     }()
-
+    
     var body: some Scene {
         WindowGroup {
-            TodoView()
-//            ContentView()
+            TodoListView().modelContainer(sharedModelContainer)
         }
-        .modelContainer(sharedModelContainer)
     }
 }
