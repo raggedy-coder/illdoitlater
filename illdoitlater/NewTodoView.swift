@@ -48,8 +48,11 @@ struct NewTodoView: View {
     @State fileprivate var dueDateOption: DueDateOption = .none
     @State private var dueDate: Date = Date()
     @State private var text: String = ""
+    @State private var showingAlert: Bool = false
     
     private func save() {
+        print("Saving!")
+        
         context.insert(Todo(text: text, dueDate: dueDateOption == .pickDate ? dueDate : dueDateOption.date))
         
         if context.hasChanges {
@@ -59,11 +62,35 @@ struct NewTodoView: View {
         dismiss()
     }
     
+    private func NewTodoFooter() -> some View {
+        return HStack(alignment: .center) {
+            Spacer()
+            Button("Cancel") {
+                if text.isEmpty {
+                    dismiss()
+                } else {
+                    showingAlert = true
+                }
+            }.alert(Text("Exit without saving?"), isPresented: $showingAlert) {
+                Button("Cancel", role: .cancel) {}
+                Button("Exit", role: .destructive) {
+                    dismiss()
+                }
+            }
+            Spacer()
+//            Button("Save") {
+//                save()
+//            }
+//            Spacer()
+        }
+    }
+    
     var body: some View {
         VStack() {
             Spacer()
-            TextField(PLACEHOLDER_TEXT, text: $text, axis: .vertical)
+            TextField(PLACEHOLDER_TEXT, text: $text)
                 .font(.title)
+                .submitLabel(.done)
                 .onSubmit {
                     save()
                 }
@@ -83,6 +110,7 @@ struct NewTodoView: View {
                 }).formattedPicker()
             }
             Spacer()
+            NewTodoFooter()
         }.padding()
     }
 }

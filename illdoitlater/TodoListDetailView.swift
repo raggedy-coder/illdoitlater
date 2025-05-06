@@ -15,6 +15,6 @@ struct TodoListDetailView: View {
     }
     
     var body: some View {
-        Text("Detail View")
+        Text("Coming next!")
     }
 }

@@ -59,8 +59,7 @@ struct TodoListTable: View {
     var body: some View {
         List {
             ForEach(TodoListTableCategories.allCases) { category in
-                let filteredTodos = category.filtered(todos)
-                
+                let filteredTodos = category.filtered(todos).activeOnly
                 if filteredTodos.isEmpty {
                     EmptyView()
                 } else {

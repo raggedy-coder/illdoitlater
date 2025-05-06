@@ -21,7 +21,7 @@ struct TodoListView: View {
     
     fileprivate func TodoListFooter() -> some View {
         return HStack {
-            Button("New To Do") {
+            Button("New To Do", systemImage: "plus.circle") {
                 showingNewTodoView.toggle()
             }.sheet(isPresented: $showingNewTodoView) {
                 NewTodoView()

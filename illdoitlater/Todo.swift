@@ -27,7 +27,11 @@ extension Array where Element: Todo {
     private var withDueDates: [Todo] {
         self.filter({ $0.dueDate != nil })
     }
-    
+
+    var activeOnly: [Todo] {
+        self.filter({ !$0.isCompleted })
+    }
+
     var pastDue: [Todo] {
         withDueDates.filter({ Calendar.current.isDatePast($0.dueDate!) })
     }
