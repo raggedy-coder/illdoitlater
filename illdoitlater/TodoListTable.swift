@@ -6,14 +6,14 @@
 //
 
 import SwiftUI
-import SwiftData
 
-fileprivate enum TodoListTableCategories: String, CaseIterable, Identifiable {
+enum TodoListTableCategory: String, CaseIterable, Identifiable {
     case pastDue = "Past Due"
     case today = "Today"
     case tomorrow = "Tomorrow"
     case upcoming = "Upcoming"
     case eventually = "Eventually"
+    case completed = "Completed"
     
     var id: String { rawValue }
     
@@ -23,59 +23,40 @@ fileprivate enum TodoListTableCategories: String, CaseIterable, Identifiable {
         case .today: return .blue
         case .tomorrow: return .orange
         case .upcoming: return .green
-        case .eventually: return .gray
+        case .eventually: return .yellow
+        case .completed: return .gray
         }
     }
-    
-    func filtered(_ todos: [Todo]) -> [Todo] {
-        switch self {
-        case .pastDue: return todos.pastDue
-        case .today: return todos.today
-        case .tomorrow: return todos.tomorrow
-        case .upcoming: return todos.upcoming
-        case .eventually: return todos.noDueDates
-        }
-    }
-    
 }
+
 struct TodoListTable: View {
-    @Environment(\.modelContext) private var context
     var todos: [Todo]
     
     init(_ todos: [Todo]) {
         self.todos = todos
     }
     
-    private func removeTodos(at indexes: IndexSet) {
-        for index in indexes {
-            context.delete(todos[index])
-        }
-        
-        if context.hasChanges {
-            try? context.save()
+    private func filtered(by category: TodoListTableCategory) -> [Todo] {
+        switch category {
+        case .pastDue: return todos.notCompleted.pastDue
+        case .today: return todos.notCompleted.today
+        case .tomorrow: return todos.notCompleted.tomorrow
+        case .upcoming: return todos.notCompleted.upcoming
+        case .eventually: return todos.notCompleted.noDueDates
+        case .completed: return todos.completed
         }
     }
     
     var body: some View {
         List {
-            ForEach(TodoListTableCategories.allCases) { category in
-                let filteredTodos = category.filtered(todos).activeOnly
+            ForEach(TodoListTableCategory.allCases) { category in
+                let filteredTodos = filtered(by: category)
                 if filteredTodos.isEmpty {
                     EmptyView()
                 } else {
-                    Section(header: Text(category.id).foregroundStyle(category.color), content: {
-                        ForEach(filteredTodos) { todo in
-                            NavigationLink {
-                                TodoListDetailView(todo)
-                            } label: {
-                                TodoListRow(todo)
-                            }
-                        }.onDelete { indexes in
-                            removeTodos(at: indexes)
-                        }
-                    })
+                    TodoListSection(category: category, todos: filteredTodos)
                 }
             }.listRowSeparator(.hidden)
-        }.listStyle(.plain)
+        }.listStyle(.sidebar).scrollContentBackground(.hidden)
     }
 }

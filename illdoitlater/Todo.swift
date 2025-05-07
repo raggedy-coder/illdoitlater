@@ -14,7 +14,7 @@ final class Todo {
     var text: String
     var dueDate: Date?
     var isCompleted: Bool
-        
+    
     init(uid: String? = nil, text: String, dueDate: Date? = nil, isCompleted: Bool = false) {
         self.uid = uid ?? UUID().uuidString
         self.text = text
@@ -24,14 +24,22 @@ final class Todo {
 }
 
 extension Array where Element: Todo {
-    private var withDueDates: [Todo] {
-        self.filter({ $0.dueDate != nil })
+    var notCompleted: [Todo] {
+        filter({ !$0.isCompleted })
     }
-
-    var activeOnly: [Todo] {
-        self.filter({ !$0.isCompleted })
+    
+    var completed: [Todo] {
+        filter({ $0.isCompleted })
     }
-
+    
+    var withDueDates: [Todo] {
+        filter({ $0.dueDate != nil })
+    }
+    
+    var noDueDates: [Todo] {
+        filter({ $0.dueDate == nil })
+    }
+    
     var pastDue: [Todo] {
         withDueDates.filter({ Calendar.current.isDatePast($0.dueDate!) })
     }
@@ -52,10 +60,6 @@ extension Array where Element: Todo {
         withDueDates.filter({
             Calendar.current.isDateInNextWeek($0.dueDate!)
         })
-    }
-    
-    var noDueDates: [Todo] {
-        filter({ $0.dueDate == nil })
     }
 }
 
