@@ -1,4 +1,17 @@
-HStack(alignment: .center) {
+//
+//  TodoListFooter.swift
+//  im so done
+//
+//  Created by RB de Guzman on 5/7/25.
+//
+
+import SwiftUI
+
+struct TodoListFooter: View {
+    @State private var showingNewTodoView: Bool = false
+    
+    var body: some View {
+        HStack(alignment: .center) {
             Image(systemName: "line.3.horizontal.decrease").opacity(0) //TODO: This is inefficient
             Spacer()
             Button("New To Do", systemImage: "plus.circle") {
@@ -8,15 +21,14 @@ HStack(alignment: .center) {
             }
             Spacer()
             Menu {
-                Picker("Filter", selection: $filterOption) {
-                    ForEach(FilterOption.allCases) {
-                        Text($0.text).tag($0)
-                    }
-                }
-                Button("A button", systemImage: isShowCompleted ? "checkmark" : "plus") {
-                    isShowCompleted.toggle()
+                Section("Show") {
+                    Button("Collapse all") {}
+                    Button("Expand all") {}
                 }
             } label: {
                 Image(systemName: "line.3.horizontal.decrease")
             }.menuOrder(.fixed)
         }.padding([.leading, .trailing, .bottom])
+        
+    }
+}
