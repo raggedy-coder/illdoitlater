@@ -32,10 +32,13 @@ enum TodoListTableCategory: String, CaseIterable, Identifiable {
 
 struct TodoListTable: View {
     @Environment(\.modelContext) private var context
+    @Binding var expandedCategories: Set<TodoListTableCategory>
+    
     var todos: [Todo]
     
-    init(_ todos: [Todo]) {
+    init(_ todos: [Todo], expandedCategories: Binding<Set<TodoListTableCategory>>) {
         self.todos = todos
+        self._expandedCategories = expandedCategories
     }
     
     private func filtered(by category: TodoListTableCategory) -> [Todo] {
@@ -59,34 +62,51 @@ struct TodoListTable: View {
         }
     }
     
+    private func toggleSection(_ category: TodoListTableCategory) {
+        if expandedCategories.contains(category) {
+            expandedCategories.remove(category)
+        } else {
+            expandedCategories.insert(category)
+        }
+    }
+    
     var body: some View {
         List {
             ForEach(TodoListTableCategory.allCases) { category in
                 let filteredTodos = filtered(by: category)
+                let isExpanded = expandedCategories.contains(category)
+                
                 if filteredTodos.isEmpty {
                     EmptyView()
                 } else {
                     Section {
-                        ForEach(filteredTodos) { todo in
-                            NavigationLink(value: todo) {
-                                TodoListRow(todo)
+                        if isExpanded {
+                            ForEach(filteredTodos) { todo in
+                                NavigationLink(value: todo) {
+                                    TodoListRow(todo)
+                                }
+                            }.onDelete { indexes in
+                                removeTodos(at: indexes)
                             }
-                        }.onDelete { indexes in
-                            removeTodos(at: indexes)
+                        } else {
+                            EmptyView()
                         }
                     } header: {
                         Button {
-                            print("HEY")
-                            //action
+                            toggleSection(category)
                         } label: {
                             HStack {
-                                Text(category.rawValue).foregroundStyle(category.color).font(.caption)
+                                Image(systemName: isExpanded ? "chevron.down" : "chevron.right")
+                                Text(category.rawValue)
+                                    .font(.caption)
                                 Spacer()
-                            }
+                            }.foregroundStyle(category.color)
                         }
                     }
                 }
             }.listRowSeparator(.hidden)
-        }.listStyle(.grouped).scrollContentBackground(.hidden)
+        }
+        .listStyle(.grouped)
+        .scrollContentBackground(.hidden)
     }
 }

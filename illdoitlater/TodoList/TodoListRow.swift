@@ -44,7 +44,9 @@ struct TodoListRow: View {
             VStack(alignment: .leading, content: {
                 Text(todo.text).strikethrough(todo.isCompleted)
                 if let date = todo.dueDate {
-                    Text(displayableDate(date)).font(.caption).foregroundStyle(.gray)
+                    Text(displayableDate(date))
+                        .font(.caption)
+                        .foregroundStyle(.gray)
                 }
             })
         }
