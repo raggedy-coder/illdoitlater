@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import SwiftData
 
 enum TodoListTableCategory: String, CaseIterable, Identifiable {
     case pastDue = "Past Due"
@@ -30,6 +31,7 @@ enum TodoListTableCategory: String, CaseIterable, Identifiable {
 }
 
 struct TodoListTable: View {
+    @Environment(\.modelContext) private var context
     var todos: [Todo]
     
     init(_ todos: [Todo]) {
@@ -47,6 +49,16 @@ struct TodoListTable: View {
         }
     }
     
+    private func removeTodos(at indexes: IndexSet) {
+        for index in indexes {
+            context.delete(todos[index])
+        }
+        
+        if context.hasChanges {
+            try? context.save()
+        }
+    }
+    
     var body: some View {
         List {
             ForEach(TodoListTableCategory.allCases) { category in
@@ -54,7 +66,17 @@ struct TodoListTable: View {
                 if filteredTodos.isEmpty {
                     EmptyView()
                 } else {
-                    TodoListSection(category: category, todos: filteredTodos)
+                    Section(category.rawValue, isExpanded: .constant(true)) {
+                        ForEach(todos) { todo in
+                            NavigationLink {
+                                TodoListDetailView(todo)
+                            } label: {
+                                TodoListRow(todo)
+                            }
+                        }.onDelete { indexes in
+                            removeTodos(at: indexes)
+                        }
+                    }
                 }
             }.listRowSeparator(.hidden)
         }.listStyle(.sidebar).scrollContentBackground(.hidden)

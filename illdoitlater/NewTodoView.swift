@@ -13,7 +13,7 @@ private let PLACEHOLDER_TEXT = "What do you need to do?"
 //TODO: Extract and replace with themes
 fileprivate extension View {
     func formattedPicker() -> some View {
-        self.tint(.green).foregroundStyle(.gray)
+        tint(.green).foregroundStyle(.gray)
     }
 }
 
@@ -51,8 +51,6 @@ struct NewTodoView: View {
     @State private var showingAlert: Bool = false
     
     private func save() {
-        print("Saving!")
-        
         context.insert(Todo(text: text, dueDate: dueDateOption == .pickDate ? dueDate : dueDateOption.date))
         
         if context.hasChanges {
