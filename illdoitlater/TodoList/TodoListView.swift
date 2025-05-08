@@ -24,6 +24,8 @@ struct TodoListView: View {
                 TodoListHeader()
                 TodoListTable(todos)
                 TodoListFooter()
+            }.navigationDestination(for: Todo.self) { todo in
+                TodoListDetailView(todo)
             }
         }
     }

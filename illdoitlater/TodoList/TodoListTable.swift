@@ -66,19 +66,27 @@ struct TodoListTable: View {
                 if filteredTodos.isEmpty {
                     EmptyView()
                 } else {
-                    Section(category.rawValue, isExpanded: .constant(true)) {
-                        ForEach(todos) { todo in
-                            NavigationLink {
-                                TodoListDetailView(todo)
-                            } label: {
+                    Section {
+                        ForEach(filteredTodos) { todo in
+                            NavigationLink(value: todo) {
                                 TodoListRow(todo)
                             }
                         }.onDelete { indexes in
                             removeTodos(at: indexes)
                         }
+                    } header: {
+                        Button {
+                            print("HEY")
+                            //action
+                        } label: {
+                            HStack {
+                                Text(category.rawValue).foregroundStyle(category.color).font(.caption)
+                                Spacer()
+                            }
+                        }
                     }
                 }
             }.listRowSeparator(.hidden)
-        }.listStyle(.sidebar).scrollContentBackground(.hidden)
+        }.listStyle(.grouped).scrollContentBackground(.hidden)
     }
 }
