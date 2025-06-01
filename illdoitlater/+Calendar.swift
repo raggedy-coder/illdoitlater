@@ -17,6 +17,6 @@ extension Calendar {
     }
     
     func isDateInNextWeek(_ date: Date) -> Bool {
-        date.stripped() > Date.nextWeek.stripped()
+        date.stripped() > Date.nextWeek.stripped() //TODO: This is a bug!
     }
 }

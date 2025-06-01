@@ -9,7 +9,7 @@ import Foundation
 import SwiftData
 
 @Model
-final class Todo {
+class Todo {
     @Attribute(.unique) var uid: String
     var text: String
     var dueDate: Date?
@@ -45,21 +45,19 @@ extension Array where Element: Todo {
     }
     
     var today: [Todo] {
-        withDueDates.filter({ Calendar.current.isDateInToday($0.dueDate!)})
+        withDueDates.filter({ $0.dueDate!.isInToday })
     }
     
     var tomorrow: [Todo] {
-        withDueDates.filter({ Calendar.current.isDateInTomorrow($0.dueDate!)})
+        withDueDates.filter({ $0.dueDate!.isInTomorrow })
     }
     
     var upcoming: [Todo] {
-        withDueDates.filter({ Calendar.current.isDateAfterTomorrow($0.dueDate!)})
+        withDueDates.filter({ $0.dueDate!.isInUpcoming })
     }
     
     var nextWeek: [Todo] {
-        withDueDates.filter({
-            Calendar.current.isDateInNextWeek($0.dueDate!)
-        })
+        withDueDates.filter({ $0.dueDate!.isInNextWeek })
     }
 }
 

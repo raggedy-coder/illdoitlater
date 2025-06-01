@@ -33,6 +33,7 @@ enum TodoListTableCategory: String, CaseIterable, Identifiable {
 struct TodoListTable: View {
     @Environment(\.modelContext) private var context
     @Binding var expandedCategories: Set<TodoListTableCategory>
+    @State var showingDeletePastDueAlert: Bool = false
     
     var todos: [Todo]
     
@@ -49,6 +50,14 @@ struct TodoListTable: View {
         case .upcoming: return todos.notCompleted.upcoming
         case .eventually: return todos.notCompleted.noDueDates
         case .completed: return todos.completed
+        }
+    }
+    
+    private func removeFilteredTodos(_ todos: [Todo]) {
+        todos.forEach { todo in context.delete(todo) }
+        
+        if context.hasChanges {
+            try? context.save()
         }
     }
     
@@ -70,17 +79,52 @@ struct TodoListTable: View {
         }
     }
     
+    private func SectionHeader(for todos: [Todo], in category: TodoListTableCategory) -> some View {
+        let sectionText = "\(category.rawValue.uppercased())\(todos.count > 0 && category != .completed ? " (\(todos.count))" : "")"
+        
+        return Button {
+            toggleSection(category)
+        } label: {
+            HStack(alignment: .center) {
+                Image(systemName: expandedCategories.contains(category) ? "chevron.down" : "chevron.right")
+                Text(sectionText)
+                Spacer()
+                if category == .pastDue {
+                    Button("Clear all") {
+                        showingDeletePastDueAlert = true
+                    }
+//                    .labelStyle(.iconOnly)
+                    .padding([.vertical], 4)
+                    .padding([.horizontal], 8)
+                    .background(category.color)
+                    .foregroundStyle(.white)
+                    .cornerRadius(8).clipped()
+                    .overlay(
+                        RoundedRectangle(cornerRadius: 8).stroke(category.color, lineWidth: 1)
+                    )
+                    .alert("Are you sure you want to delete \(todos.count) todo\(todos.count > 1 ? "s" : "")?", isPresented: $showingDeletePastDueAlert) {
+                        Button("Cancel", role: .cancel) {}
+                        Button("Confirm", role: .destructive) {
+                            removeFilteredTodos(todos)
+                        }
+                    }
+                }
+            }
+        }
+        .font(.caption)
+        .foregroundStyle(category.color)
+        .textCase(nil)
+    }
+    
     var body: some View {
         List {
             ForEach(TodoListTableCategory.allCases) { category in
                 let filteredTodos = filtered(by: category)
-                let isExpanded = expandedCategories.contains(category)
-                
                 if filteredTodos.isEmpty {
                     EmptyView()
                 } else {
                     Section {
-                        if isExpanded {
+                        if expandedCategories.contains(category) {
                             ForEach(filteredTodos) { todo in
                                 NavigationLink(value: todo) {
                                     TodoListRow(todo)
@@ -88,20 +132,9 @@ struct TodoListTable: View {
                             }.onDelete { indexes in
                                 removeTodos(at: indexes)
                             }
-                        } else {
-                            EmptyView()
                         }
                     } header: {
-                        Button {
-                            toggleSection(category)
-                        } label: {
-                            HStack {
-                                Image(systemName: isExpanded ? "chevron.down" : "chevron.right")
-                                Text(category.rawValue)
-                                    .font(.caption)
-                                Spacer()
-                            }.foregroundStyle(category.color)
-                        }
+                        SectionHeader(for: filteredTodos, in: category)
                     }
                 }
             }.listRowSeparator(.hidden)

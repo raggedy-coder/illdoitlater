@@ -11,13 +11,13 @@ import SwiftUI
 private let PLACEHOLDER_TEXT = "What do you need to do?"
 
 //TODO: Extract and replace with themes
-fileprivate extension View {
+extension View {
     func formattedPicker() -> some View {
         tint(.green).foregroundStyle(.gray)
     }
 }
 
-fileprivate enum DueDateOption: String, CaseIterable, Identifiable {
+enum DueDateOption: String, CaseIterable, Identifiable {
     case none, today, tomorrow, nextWeek, pickDate
     var id: Self { self }
     
