@@ -9,7 +9,6 @@ import SwiftUI
 import SwiftData
 
 struct TodoListRow: View {
-    //    @Environment(\.modelContext) private var context
     @Bindable var todo: Todo
     var isEditing: Bool = false
     

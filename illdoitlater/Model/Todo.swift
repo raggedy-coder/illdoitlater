@@ -23,6 +23,20 @@ class Todo {
     }
 }
 
+extension Todo {
+    var dueDateOption: DueDateOption {
+        if let dueDate = dueDate {
+            if dueDate.isInUpcoming { return .pickDate }
+            if dueDate.isInNextWeek { return .nextWeek }
+            if dueDate.isInTomorrow { return .tomorrow }
+            if dueDate.isInToday { return .today }
+            return .pickDate
+        } else {
+            return .none
+        }
+    }
+}
+
 extension Array where Element: Todo {
     var notCompleted: [Todo] {
         filter({ !$0.isCompleted })

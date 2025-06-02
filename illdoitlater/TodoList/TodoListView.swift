@@ -12,6 +12,18 @@ struct TodoListView: View {
     @Query(sort: \Todo.dueDate) private var todos: [Todo]
     @State private var expandedCategories: Set<TodoListTableCategory> = Set([.today, .tomorrow, .upcoming, .eventually])
     
+    var body: some View {
+        NavigationStack {
+            VStack(alignment: .center) {
+                TodoListHeader()
+                TodoListTable(todos, expandedCategories: $expandedCategories)
+                TodoListFooter(expandAllAction: expandSections, collapseAllAction: collapseSections)
+            }.navigationDestination(for: Todo.self) { todo in
+                TodoListDetailView(todo)
+            }
+        }
+    }
+    
     private func TodoListHeader() -> some View {
         return VStack {
             Text(Date()
@@ -26,18 +38,6 @@ struct TodoListView: View {
     
     func expandSections() {
         expandedCategories = Set(TodoListTableCategory.allCases)
-    }
-    
-    var body: some View {
-        NavigationStack {
-            VStack(alignment: .center) {
-                TodoListHeader()
-                TodoListTable(todos, expandedCategories: $expandedCategories)
-                TodoListFooter(expandAllAction: expandSections, collapseAllAction: collapseSections)
-            }.navigationDestination(for: Todo.self) { todo in
-                TodoListDetailView(todo)
-            }
-        }
     }
 }
 
