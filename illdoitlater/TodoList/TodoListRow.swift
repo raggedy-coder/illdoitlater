@@ -45,7 +45,7 @@ struct TodoListRow: View {
             
             VStack(alignment: .leading, content: {
                 if isEditing {
-                    TextField(C.PLACEHOLDER_TEXT, text: $todo.text)
+                    TextField(Strings.newTodoPlaceholder, text: $todo.text)
                 } else {
                     Text(todo.text).strikethrough(todo.isCompleted)
                     if let date = todo.dueDate {
