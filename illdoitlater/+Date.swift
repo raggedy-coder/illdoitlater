@@ -24,6 +24,22 @@ extension Date {
         let dateComponents = Calendar.current.dateComponents(components, from: self)
         return Calendar.current.date(from: dateComponents) ?? self
     }
+    
+    var isInToday: Bool {
+        return Calendar.current.isDateInToday(self)
+    }
+    
+    var isInTomorrow: Bool {
+        return Calendar.current.isDateInTomorrow(self)
+    }
+    
+    var isInNextWeek: Bool {
+        return Calendar.current.isDateInNextWeek(self)
+    }
+    
+    var isInUpcoming: Bool {
+        return Calendar.current.isDateAfterTomorrow(self)
+    }
 }
 
 

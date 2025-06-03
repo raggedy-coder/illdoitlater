@@ -6,14 +6,14 @@
 //
 
 import SwiftUI
-import SwiftData
 
 struct TodoListRow: View {
-    @Environment(\.modelContext) private var context
-    var todo: Todo
+    @Bindable var todo: Todo
+    var isEditing: Bool = false
     
-    init(_ todo: Todo) {
+    init(_ todo: Todo, isEditing: Bool = false) {
         self.todo = todo
+        self.isEditing = isEditing
     }
     
     private func displayableDate(_ date: Date) -> String {
@@ -24,10 +24,7 @@ struct TodoListRow: View {
     
     private func toggle() {
         todo.isCompleted.toggle()
-        context.insert(todo)
-        if context.hasChanges {
-            try? context.save()
-        }
+        try? todo.modelContext?.save()
     }
     
     var body: some View {
@@ -42,10 +39,17 @@ struct TodoListRow: View {
             }
             
             VStack(alignment: .leading, content: {
-                Text(todo.text).strikethrough(todo.isCompleted)
-                if let date = todo.dueDate {
-                    Text(displayableDate(date)).font(.caption).foregroundStyle(.gray)
+                if isEditing {
+                    TextField(Strings.newTodoPlaceholder, text: $todo.text)
+                } else {
+                    Text(todo.text).strikethrough(todo.isCompleted)
+                    if let date = todo.dueDate {
+                        Text(displayableDate(date))
+                            .font(.caption)
+                            .foregroundStyle(.gray)
+                    }
                 }
+                
             })
         }
     }
