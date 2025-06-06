@@ -1,5 +1,5 @@
 //
-//  TodoListDetailView.swift
+//  TodoEditView.swift
 //  illdoitlater
 //
 //  Created by RB de Guzman on 5/5/25.
@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct TodoListDetailView: View {
+struct TodoEditView: View {
     @Environment(\.modelContext) var context
     var todo: Todo
     @State private var dueDateOption: DueDateOption
@@ -20,7 +20,7 @@ struct TodoListDetailView: View {
     var body: some View {
         Form {
             Section {
-                TodoListRow(todo, isEditing: true)
+                TodoRow(todo, isEditing: true)
             }
             Section {
                 DueDatePicker(dueDateOption: $dueDateOption, dueDate: Binding(get: {
@@ -45,5 +45,5 @@ struct TodoListDetailView: View {
 
 #Preview {
     let todo = Todo(text: "Walk the dog", dueDate: DueDateOption.nextWeek.correspondingDate)
-    TodoListDetailView(todo)
+    TodoEditView(todo)
 }

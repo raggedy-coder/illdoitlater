@@ -1,5 +1,5 @@
 //
-//  TodoListRow.swift
+//  TodoRow.swift
 //  illdoitlater
 //
 //  Created by RB de Guzman on 5/4/25.
@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct TodoListRow: View {
+struct TodoRow: View {
     @Bindable var todo: Todo
     var isEditing: Bool = false
     

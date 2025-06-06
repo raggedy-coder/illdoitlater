@@ -27,7 +27,7 @@ struct illdoitlaterApp: App {
     
     var body: some Scene {
         WindowGroup {
-            TodoListView().modelContainer(sharedModelContainer)
+            TodayView().modelContainer(sharedModelContainer)
         }
     }
 }
