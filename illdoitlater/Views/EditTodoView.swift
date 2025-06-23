@@ -1,5 +1,5 @@
 //
-//  TodoEditView.swift
+//  EditTodoView.swift
 //  illdoitlater
 //
 //  Created by RB de Guzman on 5/5/25.
@@ -7,11 +7,13 @@
 
 import SwiftUI
 
-struct TodoEditView: View {
-    @Environment(\.modelContext) var context
+struct EditTodoView: View {
     var todo: Todo
-    @State private var dueDateOption: DueDateOption
 
+    @Environment(\.modelContext) private var context
+    @Environment(\.dismiss) private var dismiss
+    @State private var dueDateOption: DueDateOption
+    
     init(_ todo: Todo) {
         self.todo = todo
         self._dueDateOption = .init(initialValue: todo.dueDateOption)
@@ -33,6 +35,14 @@ struct TodoEditView: View {
                     }
                 }
             }
+            Section {
+                HStack(alignment: .center, content: {
+                    Button(Strings.delete, role: .destructive) {
+                        context.delete(todo)
+                        dismiss()
+                    }
+                })
+            }
         }
         .listRowSeparator(.hidden)
         .onDisappear {
@@ -45,5 +55,5 @@ struct TodoEditView: View {
 
 #Preview {
     let todo = Todo(text: "Walk the dog", dueDate: DueDateOption.nextWeek.correspondingDate)
-    TodoEditView(todo)
+    EditTodoView(todo)
 }

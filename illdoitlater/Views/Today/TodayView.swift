@@ -9,18 +9,19 @@ import SwiftUI
 import SwiftData
 
 struct TodayView: View {
+    @Environment(\.modelContext) private var context
     @Query(sort: \Todo.dueDate) private var todos: [Todo]
-    @State fileprivate var expandedSections: Set<TodayCategory> = Set([.today, .tomorrow, .upcoming, .eventually])
+    @State private var expandedSections: Set<TodayCategory> = Set([.today, .tomorrow, .upcoming, .eventually])
     
     private func collapseAll() {
         expandedSections.removeAll()
     }
-    
+
     private func expandAll() {
         expandedSections = Set(TodayCategory.allCases)
     }
     
-    fileprivate func toggleSection(_ category: TodayCategory) {
+    private func toggleSection(_ category: TodayCategory) {
         if expandedSections.contains(category) {
             expandedSections.remove(category)
         } else {
@@ -45,18 +46,26 @@ struct TodayView: View {
                                         TodoRow(todo)
                                     }
                                 }.onDelete { indexes in
-                                    //TODO: perform onDelete
+                                    for index in indexes {
+                                        context.delete(filteredTodos[index])
+                                    }
+                                    
+                                    if context.hasChanges {
+                                        try? context.save()
+                                    }
                                 }
                             } else {
                                 EmptyView()
                             }
                         } header: {
-                            let config = TodaySectionHeaderConfig(text: category.id.uppercased() + (filteredTodos.count > 0 && category != .completed ? " (\(filteredTodos.count))" : ""), color: category.color, isExpanded: expandedSections.contains(category), onClearAll: (category == .pastDue && todos.count > 0) ? {
-                                //TODO: perform onClearAll
+                            let config = TodaySectionHeaderConfig(text: category.id.uppercased() + (filteredTodos.count > 0 && category != .completed ? " (\(filteredTodos.count))" : ""), color: category.color, isExpanded: expandedSections.contains(category), onClearAll: (category == .pastDue && filteredTodos.count > 0) ? {
+                                filteredTodos.forEach { context.delete($0) }
+                                if context.hasChanges {
+                                    try? context.save()
+                                }
                             } : nil, onTapExpand: {
                                 toggleSection(category)
                             })
-                            
                             TodaySectionHeader(config: config )
                         }.listRowSeparator(.hidden)
                     }
@@ -65,7 +74,7 @@ struct TodayView: View {
                 .scrollContentBackground(.hidden)
                 TodayFooter(onExpandAll: expandAll, onCollapseAll: collapseAll)
             }.navigationDestination(for: Todo.self) { todo in
-                TodoEditView(todo)
+                EditTodoView(todo)
             }
         }
     }

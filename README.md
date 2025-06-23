@@ -1,3 +1,8 @@
+# Personal Goals
+- Release a native ToDo app that strictly uses Apple first party features such as Xcode, Swift Packages and XCloud
+- Provide a basic template for building SwiftUI apps using SwiftData
+- Use Apple's Model-View as the architecture, similar to this WWDC video: https://developer.apple.com/videos/play/wwdc2019/226/
+
 # Coding Guidelines
 Primarily follows the rules set by [Swift.org](https://www.swift.org/documentation/api-design-guidelines/)
 

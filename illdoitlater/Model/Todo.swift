@@ -38,6 +38,10 @@ extension Todo {
 }
 
 extension Array where Element: Todo {
+    subscript(id: Todo.ID) -> Todo? {
+        return first { $0.id == id }
+    }
+    
     var notCompleted: [Todo] {
         filter({ !$0.isCompleted })
     }

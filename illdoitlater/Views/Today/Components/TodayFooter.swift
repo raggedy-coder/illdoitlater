@@ -21,7 +21,7 @@ struct TodayFooter: View {
     
     var body: some View {
         HStack(alignment: .center) {
-            Image(systemName: "line.3.horizontal.decrease").opacity(0) //NOTE: This is inefficient
+            Image(systemName: "line.3.horizontal.decrease").opacity(0) //TODO: I'm only using this to keep symmetry with the spacing. There is most likely an actual fix for this.
             Spacer()
             Button(Strings.newTodo, systemImage: "plus.circle") {
                 isPresentingNewTodoView.toggle()

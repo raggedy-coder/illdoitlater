@@ -12,5 +12,6 @@ enum Strings {
     static let confirm = "Confirm"
     static let currentWeekday = Date().formatted(Date.FormatStyle().weekday(.wide))
     static let currentMonthAndDay = Date().formatted(Date.FormatStyle().month(.wide).day())
+    static let delete = "Delete"
     static let newTodoPlaceholder = "What do you need to do?"
 }
