@@ -1,7 +1,17 @@
 # Personal Goals
+- Todo app for the non-commital
 - Release a native ToDo app that strictly uses Apple first party features such as Xcode, Swift Packages and XCloud
 - Provide a basic template for building SwiftUI apps using SwiftData
 - Use Apple's Model-View as the architecture, similar to this WWDC video: https://developer.apple.com/videos/play/wwdc2019/226/
+
+# Demo
+Light | Dark
+--- | ---
+<img width="200" alt="dark-mode" src="https://github.com/user-attachments/assets/31b5b39a-f7ec-4e2f-9988-a2669cd44987" /> | <img width="200" alt="light-mode" src="https://github.com/user-attachments/assets/e46e602d-0f88-4bba-901b-b6976730f64e" />
+
+Easy to use | Clear past due | Collapsible
+--- | --- | ---
+![easytodo200](https://github.com/user-attachments/assets/ea43e6f7-9bba-4ed0-a47b-fdb0e71ab8b0) | ![clearpastdue](https://github.com/user-attachments/assets/e3cc076b-32c6-4777-9816-b0512a367fbd) | ![collapsible](https://github.com/user-attachments/assets/6483d3dc-0dde-42e1-af1a-90a02c4ee2b7)
 
 # Coding Guidelines
 Primarily follows the rules set by [Swift.org](https://www.swift.org/documentation/api-design-guidelines/)
