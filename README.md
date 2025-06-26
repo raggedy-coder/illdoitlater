@@ -9,9 +9,13 @@ Light | Dark
 --- | ---
 <img width="200" alt="dark-mode" src="https://github.com/user-attachments/assets/31b5b39a-f7ec-4e2f-9988-a2669cd44987" /> | <img width="200" alt="light-mode" src="https://github.com/user-attachments/assets/e46e602d-0f88-4bba-901b-b6976730f64e" />
 
-Easy to use | Clear past due | Collapsible
+Easy to use | Collapsible | Clear All Past Due
 --- | --- | ---
-![easytodo200](https://github.com/user-attachments/assets/ea43e6f7-9bba-4ed0-a47b-fdb0e71ab8b0) | ![clearpastdue](https://github.com/user-attachments/assets/e3cc076b-32c6-4777-9816-b0512a367fbd) | ![collapsible](https://github.com/user-attachments/assets/6483d3dc-0dde-42e1-af1a-90a02c4ee2b7)
+![easytodo200](https://github.com/user-attachments/assets/ea43e6f7-9bba-4ed0-a47b-fdb0e71ab8b0) | ![clearpastdue](https://github.com/user-attachments/assets/e3cc076b-32c6-4777-9816-b0512a367fbd) | ![clearallpastdue](https://github.com/user-attachments/assets/a6fcc795-c592-4d29-aa22-6233705bcd59)
+
+History | Edit & Delete
+--- | ---
+<img width="200" alt="completed-history" src="https://github.com/user-attachments/assets/994f9a8c-65aa-4f86-ac74-459ef588c814" /> | ![edit](https://github.com/user-attachments/assets/b411cf21-b0be-43c3-8129-66386203bed5)
 
 # Coding Guidelines
 Primarily follows the rules set by [Swift.org](https://www.swift.org/documentation/api-design-guidelines/)
